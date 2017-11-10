@@ -18,6 +18,7 @@ def load_all():
     from .memcache import MemcacheIntegration
     from .redis import RedisIntegration
     from .sqlalchemy import SQLAlchemyIntegration
+    from .rabbitmq import RabbitMQIntegration
 
     return [
         CassandraIntegration(),
@@ -26,4 +27,5 @@ def load_all():
         MemcacheIntegration(),
         RedisIntegration(),
         SQLAlchemyIntegration(),
+        RabbitMQIntegration(),
     ]
