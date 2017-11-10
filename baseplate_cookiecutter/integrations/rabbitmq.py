@@ -27,7 +27,7 @@ class RabbitMQIntegration(Integration):
 
         "imports": {
             "external": [
-                "from baseplate.context.rabbitmq import queue_connection_from_config, CQLMapperContextFactory",
+                "from baseplate.context import rabbitmq",
             ],
         },
 

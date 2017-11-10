@@ -66,6 +66,12 @@ class {{ cookiecutter.service_name }}(object):
 {%- if cookiecutter.integrations.sqlalchemy %}
         {{ cookiecutter.context_object }}.database.query(models.MyModel).all()
 {% endif %}
+{%- if cookiecutter.integrations.rabbitmq %}
+        {{ cookiecutter.context_object }}.rabbitmq.publish("test message", 
+        exchange=rabbitmq.make_exchange("test", type="direct"), 
+        channel={{ cookiecutter.context_object }}.rabbitmq.get_channel(),
+        routing_key=”test”)
+{% endif %}
         {{ cookiecutter.context_object }}.secrets.get_simple("secret/{{ cookiecutter.project_slug }}/example")
 
 
@@ -113,6 +119,10 @@ def make_wsgi_app(app_config):
 {%- if cookiecutter.integrations.sqlalchemy %}
     engine = engine_from_config(app_config, prefix="database.")
     baseplate.add_to_context("database", SQLAlchemySessionContextFactory(engine))
+{% endif -%}
+{% if cookiecutter.integrations.rabbitmq %}
+    connection = rabbitmq.connection_from_config(app_config, prefix="rabbitmq.")
+    baseplate.add_to_context("rabbitmq", rabbitmq.RabbitMQPublisherContextFactory(connection))
 {% endif -%}
 {%- if cookiecutter.framework == "thrift": %}
     handler = Handler()
